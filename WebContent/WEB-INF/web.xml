@@ -14,10 +14,26 @@
 	</welcome-file-list>
 	<servlet>
 		<servlet-name>calculate</servlet-name>
-		<servlet-class>calculator.Calculate</servlet-class>
+		<servlet-class>Calculate</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>calculate</servlet-name>
 		<url-pattern>/Calculate</url-pattern>
 	</servlet-mapping>
+		<servlet>
+		<servlet-name>getHistory</servlet-name>
+		<servlet-class>GetHistory</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>getHistory</servlet-name>
+		<url-pattern>/GetHistory</url-pattern>
+	</servlet-mapping>
+
+	<!-- postgreSQL設定 -->
+	<resource-ref>
+		<description>postgreSQL Datasource</description>
+		<res-ref-name>jdbc/postgres</res-ref-name>
+		<res-type>javax.sql.DataSource</res-type>
+		<res-auth>Container</res-auth>
+	</resource-ref>
 </web-app>

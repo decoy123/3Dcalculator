@@ -1,6 +1,6 @@
 'use strict';
 /**
- * 
+ *
  */
 class Calculator3D{
 	constructor() {
@@ -18,7 +18,8 @@ class Calculator3D{
 		this.mouse = { "x": 0, "y": 0 };
 		this.vector;
 		this.ray;
-		this.entryValue = 0;
-		this.fomulaArray = [];
+		this.entryValue = "0";
+		this.entryFormula = "";
+		this.formulaArray = [];
 	}
 }
