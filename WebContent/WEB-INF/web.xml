@@ -20,13 +20,21 @@
 		<servlet-name>calculate</servlet-name>
 		<url-pattern>/Calculate</url-pattern>
 	</servlet-mapping>
-		<servlet>
+	<servlet>
 		<servlet-name>getHistory</servlet-name>
 		<servlet-class>GetHistory</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>getHistory</servlet-name>
 		<url-pattern>/GetHistory</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>deleteHistory</servlet-name>
+		<servlet-class>DeleteHistory</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>deleteHistory</servlet-name>
+		<url-pattern>/DeleteHistory</url-pattern>
 	</servlet-mapping>
 
 	<!-- postgreSQL設定 -->

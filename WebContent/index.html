@@ -1,17 +1,40 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<script src="./src/scripts/lib/jquery-3.1.1.js"></script>
-<script src="./src/scripts/lib/three.js"></script>
-<script src="./src/scripts/lib/OrbitControls.js"></script>
-<script src="./src/scripts/lib/FontUtils.js"></script>
+<!-- CSS -->
+<link rel="stylesheet" href="./src/css/lib/jquery_ui/jquery-ui.css">
+<link rel="stylesheet" href="./src/css/index.css">
+<!-- JavaScript -->
+<script src="./src/scripts/lib/jquery/jquery-3.1.1.js"></script>
+<script src="./src/scripts/lib/jquery_ui/jquery-ui.js"></script>
+<script src="./src/scripts/lib/threejs/three.js"></script>
+<script src="./src/scripts/lib/threejs/TrackballControls.js"></script>
+<!-- <script src="./src/scripts/lib/threejs/OrbitControls.js"></script> -->
+<script src="./src/scripts/lib/threejs/FontUtils.js"></script>
+
 <!-- マウス選択用 -->
 <!-- <script src="./src/scripts/lib/Projector.js"></script> -->
 <meta charset="utf-8">
 <title>3D電卓</title>
 </head>
 <body>
-	<div id="stage"></div>
+	<div id="stage">
+	</div>
+	<div id="history-dialog" title="計算履歴">
+		<table id="history">
+			<thead>
+				<tr>
+					<th>選択</th>
+					<th>式</th>
+					<th>答え</th>
+					<th>削除</th>
+				</tr>
+			</thead>
+			<tbody id="history-body">
+			</tbody>
+		</table>
+	</div>
+	<!-- JavaScript -->
 	<script src="./src/scripts/Scene.js"></script>
 	<script src="./src/scripts/SceneInit.js"></script>
 	<script src="./src/scripts/Calculator.js"></script>

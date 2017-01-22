@@ -13,6 +13,7 @@ import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.io.FileUtils;
 
 public class CalculateService extends HttpServlet {
+	private static final long serialVersionUID = 2L;
 	/* SQLファイルディレクトリ */
 	private static final String SQL_DIRECTORY = Paths.get("./3DCalculator/src/sql").toString();
 	/* 計算履歴保存SQLファイル名 */
@@ -40,7 +41,7 @@ public class CalculateService extends HttpServlet {
 			if (insertResult == 0) {
 				throw new SQLException();
 			} else {
-				System.out.println("success:" + insertResult);
+				System.out.println("insert:" + insertResult);
 			}
 		}
 	}

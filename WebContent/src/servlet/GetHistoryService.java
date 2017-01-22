@@ -20,10 +20,23 @@ import org.apache.commons.dbutils.handlers.MapListHandler;
 import org.apache.commons.io.FileUtils;
 
 public class GetHistoryService extends HttpServlet {
+	private static final long serialVersionUID = 4L;
 	/* SQLファイルディレクトリ */
 	private static final String SQL_DIRECTORY = Paths.get("./3DCalculator/src/sql").toString();
 	/* 計算履歴保存SQLファイル名 */
 	private static final String SQL_GET_HISTORY = "GetHistory.sql";
+	/* ALL(引数判定用) */
+	private static final String ARG_ALL = "all";
+	/* ONLY(引数判定用) */
+	private static final String ARG_ONLY = "only";
+	/* ALL(引数判定用) */
+	private static final String WHERE_ALL = "1 = 1";
+	/* ONLY(引数判定用) */
+	private static final String WHERE_ONLY = "history_id = ";
+	/* WHERE句置換用タグ */
+	private static final String TAG_WHERE = "<% WHERE %>";
+	/* history_id(結果用JSONキー) */
+	private static final String HISTORY_ID = "HISTORY_ID";
 	/* formula(結果用JSONキー) */
 	private static final String FORMULA = "FORMULA";
 	/* result(結果用JSONキー) */
@@ -33,12 +46,18 @@ public class GetHistoryService extends HttpServlet {
 	 *
 	 *
 	 */
-	public JsonArray getHistory() throws Throwable {
+	public JsonArray getHistory(String where, int historyId) throws Throwable {
 		Properties info = new Properties();
 		try (Connection conn = Utils.getConnection(info);) {
-			/* SQL取得 */
+			/* SQL作成 */
 			File sqlFile = Paths.get(SQL_DIRECTORY, SQL_GET_HISTORY).toFile();
-			String sql = FileUtils.readFileToString(sqlFile, StandardCharsets.UTF_8);
+			String sqlRaw = FileUtils.readFileToString(sqlFile, StandardCharsets.UTF_8);
+			String sql = "";
+			if (where.equals(ARG_ALL)) {
+				sql = sqlRaw.replaceAll(TAG_WHERE, WHERE_ALL);
+			} else if (where.equals(ARG_ONLY)) {
+				sql = sqlRaw.replaceAll(TAG_WHERE, WHERE_ONLY + historyId);
+			}
 			/* SQL結果が格納されるオブジェクト形式指定 */
 			ResultSetHandler<List<Map<String, Object>>> rsh = new MapListHandler();
 			/* SQL実行 */
@@ -52,7 +71,8 @@ public class GetHistoryService extends HttpServlet {
 				for (String element : formula) {
 					formulaJson.add(element);
 				}
-				JsonObject jsonRecord = Json.createObjectBuilder().add(FORMULA, formulaJson)
+				JsonObject jsonRecord = Json.createObjectBuilder()
+						.add(HISTORY_ID, ((Integer) record.get(HISTORY_ID)).intValue()).add(FORMULA, formulaJson)
 						.add(RESULT, (String) record.get(RESULT)).build();
 				result.add(jsonRecord);
 			}

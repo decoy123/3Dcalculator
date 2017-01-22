@@ -2,7 +2,6 @@
 /**
  *
  */
-
 const calculator3D = new Calculator3D();
 
 const sceneInit = new SceneInit();

@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.math.NumberUtils;
 
 public class Calculate extends HttpServlet {
-	// private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 	/* 逆ポーランド記法変換用演算子優先順位 */
 	private static final Map<String, Integer> rpnRank = new HashMap<String, Integer>() {
 		{

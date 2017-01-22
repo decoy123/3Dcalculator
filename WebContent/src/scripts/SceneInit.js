@@ -5,22 +5,31 @@ class SceneInit{
 
 	}
 
-	// 初期処理
+	/* 初期処理 */
 	sceneInit() {
-		// scene
+		/* scene */
 		this.initScene();
 
-		// camera
+		/* camera */
 		this.initCamera();
 
-		// controls
+		/* controls */
 		this.initControls();
 
-		// light
+		/* light */
 		this.initLight();
 
-		// helper
+		/* helper */
 		this.initHelper();
+
+		/* 計算履歴ダイアログ */
+		const HISTOY_DIALOG = '#history-dialog';
+		$(function() {
+			$(HISTOY_DIALOG).dialog({
+				 autoOpen: false,
+			 });
+		});
+
 	}
 
 	initScene() {
@@ -40,7 +49,11 @@ class SceneInit{
 	}
 
 	initControls() {
-		calculator3D.controls = new THREE.OrbitControls(calculator3D.camera);
+		calculator3D.controls = new THREE.TrackballControls(calculator3D.camera);
+		calculator3D.controls.panSpeed = 0.7;
+		calculator3D.controls.rotateSpeed = 3;
+		calculator3D.controls.zoomSpeed = 0.02;
+		calculator3D.controls.staticMoving = true;
 	}
 
 	initLight() {

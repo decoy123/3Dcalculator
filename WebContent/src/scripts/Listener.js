@@ -2,30 +2,38 @@
 
 class Listener{
 	constructor() {
+		/* 計算履歴ダイアログに設定するid */
+		this.HISTORY_DIALOG_ROOT = 'history-dialog-root';
+		/* 計算履歴ダイアログに設定するidのセレクタ */
+		this.HISTORY_DIALOG_ROOT_SELECTER = '#' + this.HISTORY_DIALOG_ROOT;
 		/* 対象エレメントを取得 */
 		this.element = document.getElementById('stage');
 
-		// ------------------------------------------------------------
-		// イベントのリッスンを開始する
-		// ------------------------------------------------------------
-		// マウス移動すると実行されるイベント
-		this.element.addEventListener('mousemove', this.MouseMoveFunc, false);
-		// マウスのボタンを押すと実行されるイベント
-		this.element.addEventListener('mousedown', this.MouseDownFunc, false);
-		// マウスのボタンを離すと実行されるイベント
-		this.element.addEventListener('mouseup', this.MouseUpFunc, false);
-		// クリックすると実行されるイベント
-		this.element.addEventListener('click', this.MouseClickFunc, false);
-		// ダブルクリックすると実行されるイベント
-		this.element.addEventListener('dblclick', this.MouseDoubleClickFunc, false);
-		// キーを押すと実行されるイベント
-		document.addEventListener('keydown', this.KeyDownFunc, false);
+		/**
+		 * イベントのリッスンを開始する
+		 */
+//		/* マウス移動すると実行されるイベント */
+//		this.element.addEventListener('mousemove', this.mouseMove, false);
+//		/* マウスのボタンを押すと実行されるイベント */
+//		this.element.addEventListener('mousedown', this.mouseDown, false);
+		/* キーを押すと実行されるイベント */
+		document.addEventListener('keydown', this.KeyDown, false);
+	}
+
+	addHistoryMouse() {
+		const that = this;
+		/* 計算履歴ダイアログにid要素を追加 */
+		$('#history-dialog').parent('div').attr('id', that.HISTORY_DIALOG_ROOT);
+		/* 計算履歴ダイアログにマウスを移動するときのイベントリスナー */
+		that.historyMouseEnter();
+		/* 計算履歴ダイアログからマウスを移動するときのイベントリスナー */
+		that.historyMouseLeave();
 	}
 
 	// ------------------------------------------------------------
 	// マウスを移動すると実行される関数
 	// ------------------------------------------------------------
-	MouseMoveFunc(e) {
+	mouseMove(e) {
 		if (e.target == calculator3D.renderer.domElement) {
 			// マウス座標2D変換
 			var rect = e.target.getBoundingClientRect();
@@ -57,7 +65,7 @@ class Listener{
 	// ------------------------------------------------------------
 	// マウスのボタンを押すと実行される関数
 	// ------------------------------------------------------------
-	MouseDownFunc(e) {
+	mouseDown(e) {
 		if (e.target == calculator3D.renderer.domElement) {
 			let objs = [];
 
@@ -71,37 +79,17 @@ class Listener{
 		}
 	}
 
-	// ------------------------------------------------------------
-	// マウスのボタンを離すと実行される関数
-	// ------------------------------------------------------------
-	MouseUpFunc(e) {
-
-	}
-
-	// ------------------------------------------------------------
-	// クリックすると実行される関数
-	// ------------------------------------------------------------
-	MouseClickFunc(e) {
-
-	}
-
-	// ------------------------------------------------------------
-	// ダブルクリックすると実行される関数
-	// ------------------------------------------------------------
-	MouseDoubleClickFunc(e) {
-
-	}
-
-	// ------------------------------------------------------------
-	// キーを押すと実行される関数
-	// ------------------------------------------------------------
-	KeyDownFunc(e) {
+	/* キーを押すと実行される関数 */
+	KeyDown(e) {
+		console.log(e.key);
+		console.log(e.shiftKey);
 		const that = this;
-		const numberRegExp = /^[-]?[0-9]+(\.[0-9]+)?$/;
+		const NUMBER_REG_EXP = /^[-]?[0-9]+(\.[0-9]+)?$/;
 		event.preventDefault();
-		if (calculator3D.entryValue === 'ERROR'){
-			/* ERRORの場合削除だけを受け付ける */
-			if (e.key === "Delete"){
+		if (calculator3D.entryValue === 'ERROR' ||
+				calculator3D.formulaArray.indexOf('=') >= 0){
+			/* ERRORの場合または計算履歴を表示している場合、削除のみを受け付ける */
+			if (e.key === 'Delete'){
 				inputDelete(e)
 			}
 		} else {
@@ -111,11 +99,13 @@ class Listener{
 		/* 以下function */
 		function inputDelete(e){
 			if (e.shiftKey){
-				// CE
+				/* C */
+				calculator3D.formulaArray = [];
+				calculator.displayArea(calculator.FORMULA_AREA, calculator.formulaMaterial);
 				calculator3D.entryValue = '0';
 				calculator.displayArea(calculator.VALUE_AREA, calculator.valueMaterial);
 			} else{
-				// C
+				/* CE */
 				calculator3D.entryValue = '0';
 				calculator.displayArea(calculator.VALUE_AREA, calculator.valueMaterial);
 			}
@@ -124,30 +114,15 @@ class Listener{
 		function inputKey(e){
 			switch (e.key){
 			case "F1":
-				// MC
+				/* 計算履歴 */
 				getHistory();
 				break;
-			case "F2":
-				// MR
-				break;
-			case "F3":
-				// M+
-				break;
-			case "F4":
-				// M-
-
-				break;
-			case "F5":
-				// MS
-				break;
-			case "F6":
-				// M▽
-				break;
 			case "Delete":
+				/* C または CE */
 				inputDelete(e)
 				break;
 			case "Backspace":
-				// Backspace
+				/* Backspace */
 				calculator3D.entryValue =
 					calculator3D.entryValue.substring(0, calculator3D.entryValue.length - 1);
 				calculator.displayArea(calculator.VALUE_AREA, calculator.valueMaterial);
@@ -172,21 +147,19 @@ class Listener{
 				inputOperator(e.key);
 				break;
 			case "@":
-				// ±
+				/* ± */
 				inputPlusMinus();
 				break;
 			case "=":
 			case "Enter":
-				// =
-				if (numberRegExp.test(calculator3D.entryValue) === true &&
+				/* = */
+				if (NUMBER_REG_EXP.test(calculator3D.entryValue) === true &&
 						calculator3D.formulaArray.length > 1){
 					calculator3D.formulaArray.push(calculator3D.entryValue);
 					sendFormula();
 				}
 				break;
 			}
-			console.log(e.key);
-			console.log(e.shiftKey);
 
 			/* 数字入力 */
 			function inputNumber(key) {
@@ -220,7 +193,7 @@ class Listener{
 
 			/* 算術演算子入力 */
 			function inputOperator(key){
-				if (numberRegExp.test(calculator3D.entryValue) === true){
+				if (NUMBER_REG_EXP.test(calculator3D.entryValue) === true){
 					calculator3D.formulaArray.push(calculator3D.entryValue);
 					calculator3D.formulaArray.push(key);
 					calculator.displayArea(calculator.FORMULA_AREA, calculator.formulaMaterial);
@@ -237,7 +210,7 @@ class Listener{
 
 			/* ±入力 */
 			function inputPlusMinus(){
-				if (numberRegExp.test(calculator3D.entryValue) === true){
+				if (NUMBER_REG_EXP.test(calculator3D.entryValue) === true){
 					if (calculator3D.entryValue > 0){
 						calculator3D.entryValue = '-' + calculator3D.entryValue;
 						calculator.displayArea(calculator.VALUE_AREA, calculator.valueMaterial);
@@ -248,15 +221,15 @@ class Listener{
 				}
 			}
 
-			/* サーブレットへ計算式をPOST送信 */
+			/* サーブレットへ計算式を送信 */
 			function sendFormula() {
-				const url = 'Calculate';
-				const methodType = 'POST';
-				/* ajaxでPOST送信 */
+				const URL = 'Calculate';
+				const METHOD_TYPE = 'POST';
+				const DATA_TYPE = 'text';
 				$.ajax({
-					url: url,
-					type: methodType,
-					dataType: 'text',
+					url: URL,
+					type: METHOD_TYPE,
+					dataType: DATA_TYPE,
 					data : {
 						'KEY': e.key,
 						'SHIFT_KEY': e.shiftKey,
@@ -264,59 +237,87 @@ class Listener{
 					}
 				}).then(
 					function(result){
-						doneFormula(result);
+						doneSendFormula(result);
 					},
 					function(){
-						failFormula();
+						failSendFormula();
 					}
 				);
-				/* sendFormulaがdoneの時の処理 */
-				function doneFormula(result){
+				/* 通信が正常の場合の処理 */
+				function doneSendFormula(result){
 					console.log(result);
 					calculator3D.formulaArray = [];
 					calculator.displayArea(calculator.FORMULA_AREA, calculator.formulaMaterial);
 					calculator3D.entryValue = result;
 					calculator.displayArea(calculator.VALUE_AREA, calculator.valueMaterial);
 				}
-				/* sendFormulaがfailの時の処理 */
-				function failFormula(){
+				/* 通信がエラーの場合の処理 */
+				function failSendFormula(){
 					calculator3D.formulaArray.pop();
+					console.log('計算を行うことができません。')
 				}
 			}
 
 			/* サーブレットから計算履歴を取得 */
 			function getHistory() {
-				const url = 'GetHistory';
-				const methodType = 'POST';
+				const URL = 'GetHistory';
+				const METHOD_TYPE = 'post';
+				const DATA_TYPE = 'json';
+				const ALL = 'all';
 				/* ajaxでPOST送信 */
 				$.ajax({
-					url: url,
-					type: methodType,
-					dataType: 'json',
+					url: URL,
+					type: METHOD_TYPE,
+					dataType: DATA_TYPE,
 					data : {
+						WHERE: ALL
 					}
 				}).then(
+					/* 通信が正常の場合の処理 */
 					function(result){
-						doneHistory(result);
+						doneGetHistory(result);
 					},
+					/* 通信がエラーの場合の処理 */
 					function(){
-						failHistory();
+						failGetHistory();
 					}
 				);
-				/* getHistoryがdoneの時の処理 */
-				function doneHistory(result){
-					console.log('done');
-					window.open('./src/html/History.html',
-							'History',
-							'width=500,height=500');
-					const history = new History();
+				function doneGetHistory(result){
+					/* 計算履歴ダイアログを開く */
+				    $('#history-dialog').dialog('open');
+					/* 計算履歴データを計算履歴ダイアログに描画する */
+				    const history = new History();
 					history.displayHistory(result);
 				}
-				/* getHistoryがfailの時の処理 */
-				function failHistory(){
-					console.log('fail');
+				function failGetHistory(){
+					alert('計算履歴一覧を表示できません。');
 				}
 			}
+		}
+	}
+
+	historyMouseEnter() {
+		const that = this;
+		/* 計算履歴ダイアログにマウスを移動するときのイベントリスナー */
+		const rootElement = document.getElementById(that.HISTORY_DIALOG_ROOT)
+		rootElement.removeEventListener('mouseenter', trackballControlsFalse, false);
+		rootElement.addEventListener('mouseenter', trackballControlsFalse, false);
+
+		function trackballControlsFalse() {
+			/* TrackballControlsを無効化 */
+			calculator3D.controls.enabled = false;
+		}
+	}
+	historyMouseLeave() {
+		const that = this;
+		/* 計算履歴ダイアログからマウスを移動するときのイベントリスナー */
+		const rootElement = document.getElementById(that.HISTORY_DIALOG_ROOT)
+		rootElement.removeEventListener('mouseleave', trackballControlsTrue, false);
+		rootElement.addEventListener('mouseleave', trackballControlsTrue, false);
+
+		function trackballControlsTrue() {
+			/* TrackballControlsを有効化 */
+			calculator3D.controls.enabled = true;
 		}
 	}
 }
