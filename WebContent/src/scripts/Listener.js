@@ -115,7 +115,8 @@ class Listener{
 			switch (e.key){
 			case "F1":
 				/* 計算履歴 */
-				getHistory();
+				const history = new History();
+				history.getHistory();
 				break;
 			case "Delete":
 				/* C または CE */
@@ -255,42 +256,6 @@ class Listener{
 				function failSendFormula(){
 					calculator3D.formulaArray.pop();
 					console.log('計算を行うことができません。')
-				}
-			}
-
-			/* サーブレットから計算履歴を取得 */
-			function getHistory() {
-				const URL = 'GetHistory';
-				const METHOD_TYPE = 'post';
-				const DATA_TYPE = 'json';
-				const ALL = 'all';
-				/* ajaxでPOST送信 */
-				$.ajax({
-					url: URL,
-					type: METHOD_TYPE,
-					dataType: DATA_TYPE,
-					data : {
-						WHERE: ALL
-					}
-				}).then(
-					/* 通信が正常の場合の処理 */
-					function(result){
-						doneGetHistory(result);
-					},
-					/* 通信がエラーの場合の処理 */
-					function(){
-						failGetHistory();
-					}
-				);
-				function doneGetHistory(result){
-					/* 計算履歴ダイアログを開く */
-				    $('#history-dialog').dialog('open');
-					/* 計算履歴データを計算履歴ダイアログに描画する */
-				    const history = new History();
-					history.displayHistory(result);
-				}
-				function failGetHistory(){
-					alert('計算履歴一覧を表示できません。');
 				}
 			}
 		}

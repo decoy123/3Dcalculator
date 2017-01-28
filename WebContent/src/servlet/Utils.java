@@ -19,6 +19,8 @@ public class Utils {
 	private static final String DB_USER_NAME = "postgres";
 	/* DB パスワード */
 	private static final String DB_PASSWORD = "postgres";
+	/* SQLフォルダのパス */
+	public static final String SQL_SOURCE_DIRECTORY = "./3DCalculator/src/sql";
 
 	/**
 	 *

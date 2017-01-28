@@ -22,7 +22,7 @@ import org.apache.commons.io.FileUtils;
 public class GetHistoryService extends HttpServlet {
 	private static final long serialVersionUID = 4L;
 	/* SQLファイルディレクトリ */
-	private static final String SQL_DIRECTORY = Paths.get("./3DCalculator/src/sql").toString();
+	private static final String SQL_DIRECTORY = Paths.get(Utils.SQL_SOURCE_DIRECTORY).toString();
 	/* 計算履歴保存SQLファイル名 */
 	private static final String SQL_GET_HISTORY = "GetHistory.sql";
 	/* ALL(引数判定用) */

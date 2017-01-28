@@ -4,3 +4,5 @@
 /GetHistory.class
 /GetHistoryService.class
 /Utils.class
+/DeleteHistory.class
+/DeleteHistoryService.class
