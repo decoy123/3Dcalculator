@@ -1,5 +1,55 @@
 @CHARSET "UTF-8";
 
+/* 計算履歴ダイアログ要素 */
 #history-dialog {
+	/* ページロード時に表示されないようにHTML上では非表示 */
 	display: none;
+}
+/* ラジオボタン */
+.radio-select-history,
+.radio-delete-history {
+	/* 中央揃え */
+	text-align: center;
+}
+
+/* 計算履歴テーブル */
+#history {
+	border-spacing: 0;
+}
+
+/* 計算履歴テーブルヘッダー */
+#history thead tr th {
+	color: #ffffff;
+	padding: 8px 15px;
+	background: #ce0707;
+	font-weight: bold;
+	border-left:1px solid #ff0000;
+	border-top:1px solid #ff0000;
+	border-bottom:1px solid #ff0000;
+	line-height: 120%;
+	text-align: center;
+/* 	width: 'auto'; */
+}
+/* 計算履歴テーブルヘッダー最終カラム */
+#history thead tr th:last-child {
+	border-right:1px solid #ff0000;
+}
+
+/* 計算履歴テーブルボディ */
+#history tbody {
+	background: #ffffff;
+}
+/* 計算履歴テーブルボディ 奇数行*/
+#history tbody tr:nth-child(2n+1) {
+	background: #ffe0e0;
+}
+/* 計算履歴テーブルボディ各カラム */
+#history tbody tr td {
+	padding: 8px 15px;
+	border-bottom: 1px solid #ff0000;
+	border-left: 1px solid #ff0000;
+}
+/* 計算履歴テーブルボディ各行最終カラム */
+#history tbody tr td:last-child {
+	border-right: 1px solid #ff0000;
 }

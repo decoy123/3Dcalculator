@@ -3,194 +3,184 @@
 class Calculator{
 	constructor() {
 		/* 電卓 */
-		this.formula;
-		this.value;
-		this.mclear;
-		this.mrecall;
-		this.mplus;
-		this.mminus;
-		this.mstore;
-		this.mdata;
-		this.clearentry;
-		this.clear;
-		this.backspace;
-		this.divide;
-		this.seven;
-		this.eight;
-		this.nine;
-		this.multiply;
-		this.four;
-		this.five;
-		this.six;
-		this.minus;
-		this.one;
-		this.two;
-		this.three;
-		this.plus;
-		this.plusminus;
-		this.zero;
-		this.point;
-		this.equal;
 		this.calculator;
 		this.FORMULA_AREA = 'formula';
 		this.VALUE_AREA = 'value';
-		this.formulaMaterial = new THREE.MeshLambertMaterial({color : 0x0000ff});
-		this.valueMaterial = new THREE.MeshLambertMaterial({color : 0xff0000});
-		this.keyMaterial = new THREE.MeshLambertMaterial({color : 0xff0000});
-		this.FONT_JSON = './src/fonts/droid_sans_mono_regular.typeface.json';
+		this.mainKeyGeometry = new THREE.BoxGeometry(27, 5, 20);
+		this.subKeyGeometry = new THREE.BoxGeometry(15, 5, 10);
+		this.initSubKeyPosition = {x: -52.5, y: 0, z: 25};
+		this.initMainKeyPosition = {x: -46.5, y: 0, z: 45};
+		this.subKeySpanX = 21;
+		this.mainKeySpanX = 31;
+		this.mainKeySpanZ = 25;
+		this.formulaMaterial = new THREE.MeshLambertMaterial({color: 0x0000ff});
+		this.valueMaterial = new THREE.MeshLambertMaterial({color: 0xff0000});
+		this.keyMaterial = new THREE.MeshLambertMaterial({color: 0xff0000});
+		this.SRC_FONT_JSON = './src/fonts/droid_sans_mono_regular.typeface.json';
+		this.SRC_IMAGE_PATH = './src/img/';
 	}
 
-	// 初期処理
+	/* 初期処理 */
 	calculatorInit() {
-		// mesh
+		/* mesh */
 		this.initMesh();
 
-		// renderer
+		/* renderer */
 		this.initRenderer();
 	}
 
 	initMesh() {
 		const that = this;
+		let position;
 
-		// 電卓
+		/* 電卓 */
 		that.calculator = new THREE.Group();
 
-		// 入力値表示部分
-//		calculator3D.formulaArray.push(calculator3D.entryValue);
+		/* 入力値表示部分 */
 		that.displayArea(that.VALUE_AREA, that.valueMaterial);
 
-		// MCボタン
-		that.mclear = new THREE.Mesh(new THREE.BoxGeometry(15, 5, 10), that.keyMaterial);
-		that.mclear.position.set(-52.5, 0, 25);
-		that.calculator.add(that.mclear);
+		/* MCボタン */
+		position = $.extend(true, {}, that.initSubKeyPosition);
+		that.createKey('none.png', that.subKeyGeometry, position);
 
-		// MRボタン
-		that.mrecall = new THREE.Mesh(new THREE.BoxGeometry(15, 5, 10), that.keyMaterial);
-		that.mrecall.position.set(-31.5, 0, 25);
-		that.calculator.add(that.mrecall);
+		/* MRボタン */
+		position.x = position.x + that.subKeySpanX;
+		that.createKey('none.png', that.subKeyGeometry, position);
 
-		// M+ボタン
-		that.mplus = new THREE.Mesh(new THREE.BoxGeometry(15, 5, 10), that.keyMaterial);
-		that.mplus.position.set(-10.5, 0, 25);
-		that.calculator.add(that.mplus);
+		/* M+ボタン */
+		position.x = position.x + that.subKeySpanX;
+		that.createKey('none.png', that.subKeyGeometry, position);
 
-		// M-ボタン
-		that.mminus = new THREE.Mesh(new THREE.BoxGeometry(15, 5, 10), that.keyMaterial);
-		that.mminus.position.set(10.5, 0, 25);
-		that.calculator.add(that.mminus);
+		/* M-ボタン */
+		position.x = position.x + that.subKeySpanX;
+		that.createKey('none.png', that.subKeyGeometry, position);
 
-		// MSボタン
-		that.mstore = new THREE.Mesh(new THREE.BoxGeometry(15, 5, 10), that.keyMaterial);
-		that.mstore.position.set(31.5, 0, 25);
-		that.calculator.add(that.mstore);
+		/* MSボタン */
+		position.x = position.x + that.subKeySpanX;
+		that.createKey('none.png', that.subKeyGeometry, position);
 
-		// Mボタン
-		that.mdata = new THREE.Mesh(new THREE.BoxGeometry(15, 5, 10), that.keyMaterial);
-		that.mdata.position.set(52.5, 0, 25);
-		that.calculator.add(that.mdata);
+		/* 計算履歴ボタン */
+		position.x = position.x + that.subKeySpanX;
+		that.createKey('history.png', that.subKeyGeometry, position);
 
-		// CEボタン
-		that.clearentry = new THREE.Mesh(new THREE.BoxGeometry(27, 5, 20), that.keyMaterial);
-		that.clearentry.position.set(-46.5, 0, 45);
-		that.calculator.add(that.clearentry);
+		/* CEボタン */
+		position = $.extend(true, {}, that.initMainKeyPosition);
+		that.createKey('clear_entry.png', that.mainKeyGeometry, position);
 
-		// Cボタン
-		that.clear = new THREE.Mesh(new THREE.BoxGeometry(27, 5, 20), that.keyMaterial);
-		that.clear.position.set(-15.5, 0, 45);
-		that.calculator.add(that.clear);
+		/* Cボタン */
+		position.x = position.x + that.mainKeySpanX;
+		that.createKey('clear.png', that.mainKeyGeometry, position);
 
-		// <×ボタン
-		that.backspace = new THREE.Mesh(new THREE.BoxGeometry(27, 5, 20), that.keyMaterial);
-		that.backspace.position.set(15.5, 0, 45);
-		that.calculator.add(that.backspace);
+		/* BackSpaceボタン */
+		position.x = position.x + that.mainKeySpanX;
+		that.createKey('back_space.png', that.mainKeyGeometry, position);
 
-		// ÷ボタン
-		that.divide = new THREE.Mesh(new THREE.BoxGeometry(27, 5, 20), that.keyMaterial);
-		that.divide.position.set(46.5, 0, 45);
-		that.calculator.add(that.divide);
+		/* ÷ボタン */
+		position.x = position.x + that.mainKeySpanX;
+		that.createKey('divide.png', that.mainKeyGeometry, position);
 
-		// 7ボタン
-		that.seven = new THREE.Mesh(new THREE.BoxGeometry(27, 5, 20), that.keyMaterial);
-		that.seven.position.set(-46.5, 0, 70);
-		that.calculator.add(that.seven);
+		/* 7ボタン */
+		position = $.extend(true, {}, that.initMainKeyPosition);
+		position.z = position.z + that.mainKeySpanZ;
+		that.createKey('7.png', that.mainKeyGeometry, position);
 
-		// 8ボタン
-		that.eight = new THREE.Mesh(new THREE.BoxGeometry(27, 5, 20), that.keyMaterial);
-		that.eight.position.set(-15.5, 0, 70);
-		that.calculator.add(that.eight);
+		/* 8ボタン */
+		position.x = position.x + that.mainKeySpanX;
+		that.createKey('8.png', that.mainKeyGeometry, position);
 
-		// 9ボタン
-		that.nine = new THREE.Mesh(new THREE.BoxGeometry(27, 5, 20), that.keyMaterial);
-		that.nine.position.set(15.5, 0, 70);
-		that.calculator.add(that.nine);
+		/* 9ボタン */
+		position.x = position.x + that.mainKeySpanX;
+		that.createKey('9.png', that.mainKeyGeometry, position);
 
-		// ×ボタン
-		that.multiply = new THREE.Mesh(new THREE.BoxGeometry(27, 5, 20), that.keyMaterial);
-		that.multiply.position.set(46.5, 0, 70);
-		that.calculator.add(that.multiply);
+		/* ×ボタン */
+		position.x = position.x + that.mainKeySpanX;
+		that.createKey('multiply.png', that.mainKeyGeometry, position);
 
-		// 4ボタン
-		that.four = new THREE.Mesh(new THREE.BoxGeometry(27, 5, 20), that.keyMaterial);
-		that.four.position.set(-46.5, 0, 95);
-		that.calculator.add(that.four);
+		/* 4ボタン */
+		position = $.extend(true, {}, that.initMainKeyPosition);
+		position.z = position.z + that.mainKeySpanZ * 2;
+		that.createKey('4.png', that.mainKeyGeometry, position);
 
-		// 5ボタン
-		that.five = new THREE.Mesh(new THREE.BoxGeometry(27, 5, 20), that.keyMaterial);
-		that.five.position.set(-15.5, 0, 95);
-		that.calculator.add(that.five);
+		/* 5ボタン */
+		position.x = position.x + that.mainKeySpanX;
+		that.createKey('5.png', that.mainKeyGeometry, position);
 
-		// 6ボタン
-		that.six = new THREE.Mesh(new THREE.BoxGeometry(27, 5, 20), that.keyMaterial);
-		that.six.position.set(15.5, 0, 95);
-		that.calculator.add(that.six);
+		/* 6ボタン */
+		position.x = position.x + that.mainKeySpanX;
+		that.createKey('6.png', that.mainKeyGeometry, position);
 
-		// -ボタン
-		that.minus = new THREE.Mesh(new THREE.BoxGeometry(27, 5, 20), that.keyMaterial);
-		that.minus.position.set(46.5, 0, 95);
-		that.calculator.add(that.minus);
+		/* -ボタン */
+		position.x = position.x + that.mainKeySpanX;
+		that.createKey('minus.png', that.mainKeyGeometry, position);
 
-		// 1ボタン
-		that.one = new THREE.Mesh(new THREE.BoxGeometry(27, 5, 20), that.keyMaterial);
-		that.one.position.set(-46.5, 0, 120);
-		that.calculator.add(that.one);
+		/* 1ボタン */
+		position = $.extend(true, {}, that.initMainKeyPosition);
+		position.z = position.z + that.mainKeySpanZ * 3;
+		that.createKey('1.png', that.mainKeyGeometry, position);
 
-		// 2ボタン
-		that.two = new THREE.Mesh(new THREE.BoxGeometry(27, 5, 20), that.keyMaterial);
-		that.two.position.set(-15.5, 0, 120);
-		that.calculator.add(that.two);
+		/* 2ボタン */
+		position.x = position.x + that.mainKeySpanX;
+		that.createKey('2.png', that.mainKeyGeometry, position);
 
-		// 3ボタン
-		that.three = new THREE.Mesh(new THREE.BoxGeometry(27, 5, 20), that.keyMaterial);
-		that.three.position.set(15.5, 0, 120);
-		that.calculator.add(that.three);
+		/* 3ボタン */
+		position.x = position.x + that.mainKeySpanX;
+		that.createKey('3.png', that.mainKeyGeometry, position);
 
-		// +ボタン
-		that.plus = new THREE.Mesh(new THREE.BoxGeometry(27, 5, 20), that.keyMaterial);
-		that.plus.position.set(46.5, 0, 120);
-		that.calculator.add(that.plus);
+		/* +ボタン */
+		position.x = position.x + that.mainKeySpanX;
+		that.createKey('plus.png', that.mainKeyGeometry, position);
 
-		// ±ボタン
-		that.plusminus = new THREE.Mesh(new THREE.BoxGeometry(27, 5, 20), that.keyMaterial);
-		that.plusminus.position.set(-46.5, 0, 145);
-		that.calculator.add(that.plusminus);
+		/* ±ボタン */
+		position = $.extend(true, {}, that.initMainKeyPosition);
+		position.z = position.z + that.mainKeySpanZ * 4;
+		that.createKey('plus_minus.png', that.mainKeyGeometry, position);
 
-		// 0ボタン
-		that.zero = new THREE.Mesh(new THREE.BoxGeometry(27, 5, 20), that.keyMaterial);
-		that.zero.position.set(-15.5, 0, 145);
-		that.calculator.add(that.zero);
+		/* 0ボタン */
+		position.x = position.x + that.mainKeySpanX;
+		that.createKey('0.png', that.mainKeyGeometry, position);
 
-		// .ボタン
-		that.point = new THREE.Mesh(new THREE.BoxGeometry(27, 5, 20), that.keyMaterial);
-		that.point.position.set(15.5, 0, 145);
-		that.calculator.add(that.point);
+		/* .ボタン */
+		position.x = position.x + that.mainKeySpanX;
+		that.createKey('point.png', that.mainKeyGeometry, position);
 
-		// =ボタン
-		that.equal = new THREE.Mesh(new THREE.BoxGeometry(27, 5, 20), that.keyMaterial);
-		that.equal.position.set(46.5, 0, 145);
-		that.calculator.add(that.equal);
+		/* =ボタン */
+		position.x = position.x + that.mainKeySpanX;
+		that.createKey('equal.png', that.mainKeyGeometry, position);
 
-		// 電卓をsceneへ追加
+		/* 電卓をsceneへ追加 */
 		calculator3D.scene.add(that.calculator);
+	}
+
+	createKey(image, geometry, position){
+		const that = this;
+		const textureMaterial = new THREE.MeshLambertMaterial({
+			map: new THREE.TextureLoader().load(that.SRC_IMAGE_PATH + image),
+			transparent: true
+		});
+		const material1 = new THREE.MultiMaterial([
+			that.keyMaterial, /* right */
+			that.keyMaterial, /* left */
+			textureMaterial, /* top */
+			that.keyMaterial, /* bottom */
+			that.keyMaterial, /* back */
+			that.keyMaterial /* front */
+		]);
+		const material2 = new THREE.MultiMaterial([
+			that.keyMaterial, /* right */
+			that.keyMaterial, /* left */
+			that.keyMaterial, /* top */
+			that.keyMaterial, /* bottom */
+			that.keyMaterial, /* back */
+			that.keyMaterial /* front */
+		]);
+
+		/* Meshが重複している場合は先に作成した方が前面に描画されるため先に文字を作成 */
+		const mesh1 = new THREE.Mesh(geometry, material1);
+		const mesh2 = new THREE.Mesh(geometry, material2);
+		mesh1.position.set(position.x, position.y, position.z);
+		mesh2.position.set(position.x, position.y, position.z);
+		that.calculator.add(mesh1);
+		that.calculator.add(mesh2);
 	}
 
 	displayArea(area, material) {
@@ -221,7 +211,7 @@ class Calculator{
 		}
 
 		const loader = new THREE.FontLoader();
-		loader.load(that.FONT_JSON, function(font) {
+		loader.load(that.SRC_FONT_JSON, function(font) {
 			const textGeometry = new THREE.TextGeometry(text, {
 				font: font,
 				size: size,
@@ -237,12 +227,6 @@ class Calculator{
 				valueAreaAdd(textGeometry, material);
 				break;
 			}
-
-//			valueAreaAdd = new THREE.Mesh(textGeometry, material);
-//			var positionX = 62 - 16.7 * calculator3D.entryValue.length;
-//			valueAreaAdd.position.set(positionX, 0, 15);
-//			valueAreaAdd.rotation.set(- Math.PI/2, 0, 0);
-//			that.calculator.add(valueAreaAdd);
 		});
 		function formulaAreaAdd(textGeometry, material){
 			that.formula = new THREE.Mesh(textGeometry, material);
@@ -262,7 +246,8 @@ class Calculator{
 
 	initRenderer() {
 		calculator3D.renderer = new THREE.WebGLRenderer({
-			antialias : true
+//			antialias: true,
+			alpha: true
 		});
 		calculator3D.renderer.setSize(calculator3D.width, calculator3D.height);
 		calculator3D.renderer.setClearColor(0xefefef);

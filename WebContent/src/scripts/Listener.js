@@ -88,9 +88,12 @@ class Listener{
 		event.preventDefault();
 		if (calculator3D.entryValue === 'ERROR' ||
 				calculator3D.formulaArray.indexOf('=') >= 0){
-			/* ERRORの場合または計算履歴を表示している場合、削除のみを受け付ける */
+			/* ERRORの場合または計算履歴を表示している場合、削除と計算履歴表示のみを受け付ける */
 			if (e.key === 'Delete'){
 				inputDelete(e)
+			} else if (e.key === 'F1'){
+				const history = new History();
+				history.getHistory();
 			}
 		} else {
 			inputKey(e)

@@ -72,10 +72,14 @@ class History{
 			/* 行を描画する */
 			$(that.HISTORY_BODY_SELECTOR).append(
 					'<tr>' +
-					'<td><input type="radio" name="history_select" value="' + historyId + '"></input></td>' +
+					'<td class="radio-select-history">' +
+					'<input type="radio" name="history_select" value="' + historyId + '"></input>' +
+					'</td>' +
 					'<td>' + calculationFormula + '</td>' +
 					'<td>' + calculationResult + '</td>' +
-					'<td><input type="radio" name="history_delete" value="' + historyId + '"></input></td>' +
+					'<td class="radio-delete-history">' +
+					'<input type="radio" name="history_delete" value="' + historyId + '"></input>' +
+					'</td>' +
 					'</tr>'
 		    );
 		}
@@ -86,7 +90,7 @@ class History{
 			const URL = 'GetHistory';
 			/* 選択した計算履歴データを取得する */
 			$.ajax({
-				url: that.URL,
+				url: URL,
 				type: that.METHOD_TYPE,
 				dataType: that.DATA_TYPE,
 				data : {
@@ -148,6 +152,7 @@ class History{
 			}
 		});
 
+		/* 計算履歴ダイアログ上にマウスカーソルがある場合、Three.jsのドラッグを抑止 */
 		listener.addHistoryMouse();
 	}
 }

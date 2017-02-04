@@ -32,9 +32,6 @@ public class CalculateService extends HttpServlet {
 			File sqlFile = Paths.get(SQL_DIRECTORY, SQL_SAVE_HISTORY).toFile();
 			String sql = FileUtils.readFileToString(sqlFile, StandardCharsets.UTF_8);
 			Array formula = conn.createArrayOf(TEXT, formulaArray);
-			// /* SQL結果が格納されるオブジェクト形式指定 */
-			// ResultSetHandler<List<Map<String, Object>>> resultSetHandler =
-			// new MapListHandler();
 			/* SQL実行 */
 			QueryRunner queryRunner = new QueryRunner();
 			int insertResult = queryRunner.update(conn, sql, formula, result);
