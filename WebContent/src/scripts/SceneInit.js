@@ -22,6 +22,9 @@ class SceneInit{
 		/* helper */
 		this.initHelper();
 
+		/* renderer */
+		this.initRenderer();
+
 		/* 計算履歴ダイアログ設定 */
 		const HISTOY_DIALOG = '#history-dialog';
 		$(function() {
@@ -77,5 +80,16 @@ class SceneInit{
 		calculator3D.scene.add(calculator3D.axisHelper);
 		calculator3D.lightHelper = new THREE.DirectionalLightHelper(calculator3D.light, 20);
 		calculator3D.scene.add(calculator3D.lightHelper);
+	}
+
+	initRenderer() {
+		calculator3D.renderer = new THREE.WebGLRenderer({
+//			antialias: true,
+			alpha: true
+		});
+		calculator3D.renderer.setSize(calculator3D.width, calculator3D.height);
+		calculator3D.renderer.setClearColor(0xefefef);
+		calculator3D.renderer.setPixelRatio(window.devicePixelRatio);
+		document.getElementById('stage').appendChild(calculator3D.renderer.domElement);
 	}
 }

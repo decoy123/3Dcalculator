@@ -24,9 +24,6 @@ class Calculator{
 	calculatorInit() {
 		/* mesh */
 		this.initMesh();
-
-		/* renderer */
-		this.initRenderer();
 	}
 
 	initMesh() {
@@ -242,16 +239,5 @@ class Calculator{
 			that.value.rotation.set(- Math.PI/2, 0, 0);
 			that.calculator.add(that.value);
 		}
-	}
-
-	initRenderer() {
-		calculator3D.renderer = new THREE.WebGLRenderer({
-//			antialias: true,
-			alpha: true
-		});
-		calculator3D.renderer.setSize(calculator3D.width, calculator3D.height);
-		calculator3D.renderer.setClearColor(0xefefef);
-		calculator3D.renderer.setPixelRatio(window.devicePixelRatio);
-		document.getElementById('stage').appendChild(calculator3D.renderer.domElement);
 	}
 }
