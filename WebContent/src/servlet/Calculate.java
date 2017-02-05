@@ -99,7 +99,8 @@ public class Calculate extends HttpServlet {
 						arithmaticOperatorStack.addFirst(formulaElement);
 					} else {
 						/* 優先順位がスタックの演算子と同等か低い場合スタックを全て変換結果へ格納 */
-						for (int j = 0; j < arithmaticOperatorStack.size(); j++) {
+						int stackSize = arithmaticOperatorStack.size();
+						for (int i = 0; i < stackSize; i++) {
 							rpnArray.add(arithmaticOperatorStack.remove());
 						}
 						/* スタックへ追加 */
