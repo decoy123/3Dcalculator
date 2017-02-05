@@ -109,7 +109,8 @@ public class Calculate extends HttpServlet {
 			}
 		}
 		/* スタックに残っている演算子を変換結果へ格納 */
-		for (int i = 0; i < arithmaticOperatorStack.size(); i++) {
+		int stackSize = arithmaticOperatorStack.size();
+		for (int i = 0; i < stackSize; i++) {
 			rpnArray.add(arithmaticOperatorStack.remove());
 		}
 		return rpnArray;
