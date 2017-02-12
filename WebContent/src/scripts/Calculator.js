@@ -150,6 +150,7 @@ class Calculator{
 
 	createKey(image, geometry, position){
 		const that = this;
+		/* キーに貼る透過画像を用意 */
 		const textureMaterial = new THREE.MeshLambertMaterial({
 			map: new THREE.TextureLoader().load(that.SRC_IMAGE_PATH + image),
 			transparent: true
@@ -171,7 +172,8 @@ class Calculator{
 			that.keyMaterial /* front */
 		]);
 
-		/* Meshが重複している場合は先に作成した方が前面に描画されるため先に文字を作成 */
+		/* 透過画像の透過部分に色を付けるには、Meshを重複させる */
+		/* Meshが重複している場合は先に作成した方が前面に描画されるため先に文字のMeshを作成 */
 		const mesh1 = new THREE.Mesh(geometry, material1);
 		const mesh2 = new THREE.Mesh(geometry, material2);
 		mesh1.position.set(position.x, position.y, position.z);
@@ -180,12 +182,15 @@ class Calculator{
 		that.calculator.add(mesh2);
 	}
 
+	/* 数式エリア・数値エリア表示 */
 	displayArea(area, material) {
 		const that = this;
 		let text;
 		let size;
+		/* エリアに応じて表示する文字列とその大きさを決める */
 		switch (area){
 		case that.FORMULA_AREA:
+			/* 数式エリア文字列 */
 			that.calculator.remove(that.formula);
 			calculator3D.entryFormula = '';
 			for (let i = 0; i < calculator3D.formulaArray.length; i++){
@@ -201,12 +206,14 @@ class Calculator{
 			size = 10;
 			break;
 		case that.VALUE_AREA:
+			/* 数値エリア文字列 */
 			that.calculator.remove(that.value);
 			text = calculator3D.entryValue;
 			size = 20;
 			break;
 		}
 
+		/* フォントをロードして数式または数値を表示 */
 		const loader = new THREE.FontLoader();
 		loader.load(that.SRC_FONT_JSON, function(font) {
 			const textGeometry = new THREE.TextGeometry(text, {
@@ -218,13 +225,16 @@ class Calculator{
 
 			switch (area){
 			case that.FORMULA_AREA:
+				/* 数式エリアMesh */
 				formulaAreaAdd(textGeometry, material);
 				break;
 			case that.VALUE_AREA:
+				/* 数値エリアMesh */
 				valueAreaAdd(textGeometry, material);
 				break;
 			}
 		});
+
 		function formulaAreaAdd(textGeometry, material){
 			that.formula = new THREE.Mesh(textGeometry, material);
 			const positionX = 58 - 8.35 * calculator3D.entryFormula.length;

@@ -9,9 +9,6 @@ class Listener{
 		/* 対象エレメントを取得 */
 		this.element = document.getElementById('stage');
 
-		/**
-		 * イベントのリッスンを開始する
-		 */
 //		/* マウス移動すると実行されるイベント */
 //		this.element.addEventListener('mousemove', this.mouseMove, false);
 //		/* マウスのボタンを押すと実行されるイベント */
@@ -33,51 +30,51 @@ class Listener{
 	// ------------------------------------------------------------
 	// マウスを移動すると実行される関数
 	// ------------------------------------------------------------
-	mouseMove(e) {
-		if (e.target == calculator3D.renderer.domElement) {
-			// マウス座標2D変換
-			var rect = e.target.getBoundingClientRect();
-			calculator3D.mouse.x = e.clientX - rect.left;
-			calculator3D.mouse.y = e.clientY - rect.top;
-
-			// マウス座標3D変換 width（横）やheight（縦）は画面サイズ
-			calculator3D.mouse.x =  (calculator3D.mouse.x / calculator3D.width) * 2 - 1;
-			calculator3D.mouse.y = -(calculator3D.mouse.y / calculator3D.height) * 2 + 1;
-
-			// マウスベクトル
-			calculator3D.vector = new THREE.Vector3(
-					calculator3D.mouse.x,
-					calculator3D.mouse.y,
-					1
-			);
-
-			// vector はスクリーン座標系なので, オブジェクトの座標系に変換
-			calculator3D.vector.unproject(calculator3D.camera);
-
-			// 始点, 向きベクトルを渡してレイを作成
-			calculator3D.ray = new THREE.Raycaster(
-					calculator3D.camera.position,
-					calculator3D.vector.sub(calculator3D.camera.position).normalize()
-			);
-		}
-	}
+//	mouseMove(e) {
+//		if (e.target == calculator3D.renderer.domElement) {
+//			// マウス座標2D変換
+//			var rect = e.target.getBoundingClientRect();
+//			calculator3D.mouse.x = e.clientX - rect.left;
+//			calculator3D.mouse.y = e.clientY - rect.top;
+//
+//			// マウス座標3D変換 width（横）やheight（縦）は画面サイズ
+//			calculator3D.mouse.x =  (calculator3D.mouse.x / calculator3D.width) * 2 - 1;
+//			calculator3D.mouse.y = -(calculator3D.mouse.y / calculator3D.height) * 2 + 1;
+//
+//			// マウスベクトル
+//			calculator3D.vector = new THREE.Vector3(
+//					calculator3D.mouse.x,
+//					calculator3D.mouse.y,
+//					1
+//			);
+//
+//			// vector はスクリーン座標系なので, オブジェクトの座標系に変換
+//			calculator3D.vector.unproject(calculator3D.camera);
+//
+//			// 始点, 向きベクトルを渡してレイを作成
+//			calculator3D.ray = new THREE.Raycaster(
+//					calculator3D.camera.position,
+//					calculator3D.vector.sub(calculator3D.camera.position).normalize()
+//			);
+//		}
+//	}
 
 	// ------------------------------------------------------------
 	// マウスのボタンを押すと実行される関数
 	// ------------------------------------------------------------
-	mouseDown(e) {
-		if (e.target == calculator3D.renderer.domElement) {
-			let objs = [];
-
-			// クリック対象取得
-			objs = calculator3D.ray.intersectObjects(calculator3D.scene.children);
-
-			// クリックしていたら処理を行う
-			if (objs.length > 0){
-// console.log(mouse);
-			}
-		}
-	}
+//	mouseDown(e) {
+//		if (e.target == calculator3D.renderer.domElement) {
+//			let objs = [];
+//
+//			// クリック対象取得
+//			objs = calculator3D.ray.intersectObjects(calculator3D.scene.children);
+//
+//			// クリックしていたら処理を行う
+//			if (objs.length > 0){
+//// console.log(mouse);
+//			}
+//		}
+//	}
 
 	/* キーを押すと実行される関数 */
 	KeyDown(e) {
